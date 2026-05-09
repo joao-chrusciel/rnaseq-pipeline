@@ -1,0 +1,33 @@
+#Nextflow
+work/
+.nextflow/
+.nextflow.log*
+
+#Results
+results/
+
+#local params
+params/*.yaml
+!params/test.yaml
+
+#reference files
+*.fa
+*.fasta
+*.fa.gz
+*.fasta.gz
+*.gtf
+*.gtf.gz
+*_index/
+
+#raw data
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bai
+
+#R
+.Rhistory
+.RData
+.Rproj.user/

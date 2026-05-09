@@ -1,0 +1,5 @@
+sample,fastq_1,condition
+CTRL_01,test_data/reads/ctrl_01.fastq.gz,control
+CTRL_02,test_data/reads/ctrl_02.fastq.gz,control
+TREAT_01,test_data/reads/treat_01.fastq.gz,treatment
+TREAT_02,test_data/reads/treat_02.fastq.gz,treatment
