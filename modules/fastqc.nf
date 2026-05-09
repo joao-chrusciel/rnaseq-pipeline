@@ -1,9 +1,8 @@
 process FASTQC {
     tag "${meta.id}"
-    label 'process_single'
-
-    conda 'bioconda::fastqc=0.12.1'
-    container 'biocontainers/fastqc:0.12.1--hdfd78af_0'
+    label 'process_medium'
+    container 'quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0'
+    publishDir "${params.outdir}/fastqc", mode: 'copy'
 
     input:
     tuple val(meta), path(reads)
