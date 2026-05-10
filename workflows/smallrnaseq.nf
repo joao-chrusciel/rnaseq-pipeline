@@ -15,7 +15,7 @@ workflow SMALLRNASEQ {
     // FastQC
     if (!params.skip_fastqc) {
         FASTQC_RAW(ch_reads.map { meta, reads -> [meta + [stage: 'raw'], reads] })
-        ch_qc = ch_qc.mix(FASTQC_RAW.out.zip.map { meta, zip -> zip })
+        ch_qc = ch_qc.mix(FASTQC_RAW.out.zip.map { _meta, zip -> zip })
     }
 
     // Adapter and quality trimming
@@ -24,8 +24,8 @@ workflow SMALLRNASEQ {
 
     // FastQC on trimmed reads
     if (!params.skip_fastqc) {
-        FASTQC_TRIMMED(CUTADAPT.out.reads.map { meta, reads -> [meta + [stage: 'trimmed'], reads] })
-        ch_qc = ch_qc.mix(FASTQC_TRIMMED.out.zip.map { meta, zip -> zip })
+        FASTQC_TRIMMED(CUTADAPT.out.reads.map { _meta, reads -> [_meta + [stage: 'trimmed'], reads] })
+        ch_qc = ch_qc.mix(FASTQC_TRIMMED.out.zip.map { _meta, zip -> zip })
     }
 
     // (Optional) spike-in removal
@@ -40,7 +40,7 @@ workflow SMALLRNASEQ {
     if (!params.mirge_lib) {
         error "Missing --mirge_lib. Provide path to the miRge3.0 library folder."
     }
-    ch_fastqs = ch_clean_reads.map { meta, reads -> reads }.collect()
+    ch_fastqs = ch_clean_reads.map { _meta, reads -> reads }.collect()
     MIRGE3(ch_fastqs, file(params.mirge_lib))
 
     // MultiQC

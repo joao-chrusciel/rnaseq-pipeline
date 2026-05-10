@@ -28,6 +28,7 @@ params/*.yaml
 *.fq.gz
 *.bam
 *.bai
+*.sif
 
 #R
 .Rhistory

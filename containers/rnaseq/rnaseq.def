@@ -1,0 +1,87 @@
+Bootstrap: docker
+From: debian:12
+
+%post
+    #enable contrib repository (vienna-rna is in contrib due to license restrictions)
+    sed -i 's| main$| main contrib non-free|' /etc/apt/sources.list.d/debian.sources
+    apt-get update && apt-get install -y \
+        locales \
+        wget \
+        curl \
+        git \
+        ca-certificates \
+        bzip2 \
+        unzip \
+        default-jre \
+        python3="{{ PYTHON3_VERSION }}" \
+        python3-pip \
+        bowtie="{{ BOWTIE_VERSION }}" \
+        samtools="{{ SAMTOOLS_VERSION }}" \
+        bbmap="{{ BBMAP_VERSION }}" \
+        vienna-rna="{{ VIENNARNA_VERSION }}" \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+    #timezone and language settings for Brazil
+    ln -fs /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+    locale-gen en_US.UTF-8
+    echo 'export LANGUAGE="en_US.UTF-8"' >> "$SINGULARITY_ENVIRONMENT"
+    echo 'export LANG="en_US.UTF-8"' >> "$SINGULARITY_ENVIRONMENT"
+    echo 'export LC_ALL="en_US.UTF-8"' >> "$SINGULARITY_ENVIRONMENT"
+
+    #installation via pip
+    #numpy<1.27 pinned for miRge3/scipy ABI compatibility
+    pip install --no-cache-dir --break-system-packages \
+        "numpy<1.27" \
+        cutadapt=={{ CUTADAPT_VERSION }} \
+        miRge3=={{ MIRGE3_VERSION }} \
+        multiqc=={{ MULTIQC_VERSION }}
+
+    #patch miRge3: handle non-UTF-8 bytes in samtools --version output (Debian build metadata embeds Latin-1 «BUILDPATH»)
+    sed -i 's|capture_output=True, text=True)|capture_output=True, text=True, errors="replace")|g' \
+        /usr/local/lib/python3.11/dist-packages/mirge/libs/miRgeEssential.py
+
+    #FastQC
+    cd /opt
+    wget --tries=10 --timeout=30 --retry-connrefused \
+    "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v{{ FASTQC_VERSION }}.zip"
+    unzip "fastqc_v{{ FASTQC_VERSION }}.zip"
+    rm "fastqc_v{{ FASTQC_VERSION }}.zip"
+    chmod +x /opt/FastQC/fastqc
+    echo 'export PATH="/opt/FastQC:$PATH"' >> "$SINGULARITY_ENVIRONMENT"
+
+%test
+    fastqc --version
+    cutadapt --version
+    bbduk.sh --version 2>&1 | head -2
+    miRge3.0 --version
+    multiqc --version
+    bowtie --version | head -1
+    samtools --version | head -1
+    python3 --version
+
+%labels
+    author Joao Henrique Chrusciel
+    version {{ RNASEQ_CONTAINER_VERSION }}
+    description Small RNA-seq pipeline container (DCNL/PUCRS)
+
+%help
+    Container for the small RNA-seq pipeline (DCNL/PUCRS).
+
+    Tools included:
+        fastqc=={{ FASTQC_VERSION }}
+        cutadapt=={{ CUTADAPT_VERSION }}
+        bbmap=={{ BBMAP_VERSION }}
+        mirge3=={{ MIRGE3_VERSION }}
+        multiqc=={{ MULTIQC_VERSION }}
+        bowtie=={{ BOWTIE_VERSION }}
+        samtools=={{ SAMTOOLS_VERSION }}
+
+    numpy<1.27 pinned for miRge3/scipy ABI compatibility.
+
+    NOTE: software versions may change over time if you rebuild from this recipe.
+
+    Build:
+        bash containers/rnaseq/build.sh
+
+    Repository:
+        https://github.com/joao-chrusciel/rnaseq-pipeline

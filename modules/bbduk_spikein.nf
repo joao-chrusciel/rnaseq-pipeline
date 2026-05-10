@@ -1,7 +1,6 @@
 process BBDUK_SPIKEIN {
     tag "${meta.id}"
     label 'process_medium'
-    container 'quay.io/biocontainers/bbmap:39.81--h9b5c0a0_1'
     publishDir "${params.outdir}/bbduk_spikein", mode: 'copy'
 
     input:

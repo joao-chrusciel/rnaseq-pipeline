@@ -1,7 +1,6 @@
 process CUTADAPT {
     tag "${meta.id}"
     label 'process_medium'
-    container 'quay.io/biocontainers/cutadapt:5.2--py313h8c92656_1'
     publishDir "${params.outdir}/cutadapt", mode: 'copy'
 
     input:
