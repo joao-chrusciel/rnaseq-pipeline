@@ -8,7 +8,7 @@ process MULTIQC {
 
     output:
     path 'multiqc_report.html', emit: report
-    path 'multiqc_data/', emit: data
+    path '*_data', emit: data
 
     script:
     """

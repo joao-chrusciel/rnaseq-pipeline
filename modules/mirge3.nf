@@ -1,6 +1,6 @@
 process MIRGE3 {
     label 'process_high'
-    container 'quay.io/biocontainers/mirge3:0.1.4--pyh7cba7a3_1'
+    container 'quay.io/biocontainers/mirge3:0.1.4--pyh7cba7a3_0'
     publishDir "${params.outdir}/mirge3", mode: 'copy'
 
     input:
