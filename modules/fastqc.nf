@@ -2,7 +2,7 @@ process FASTQC {
     tag "${meta.id}"
     label 'process_medium'
     container 'quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0'
-    publishDir "${params.outdir}/fastqc", mode: 'copy'
+    publishDir "${params.outdir}/fastqc/${meta.stage}", mode: 'copy'
 
     input:
     tuple val(meta), path(reads)

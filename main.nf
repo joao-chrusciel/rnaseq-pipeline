@@ -1,6 +1,6 @@
 nextflow.enable.dsl = 2
 
-include { FASTQC } from './modules/fastqc.nf'
+include { SMALLRNASEQ } from './workflows/smallrnaseq'
 
 workflow {
     if (!params.input) {
@@ -14,5 +14,6 @@ workflow {
             def reads = file(row.fastq_1, checkIfExists: true)
             return [ meta, reads ]
             }
-    FASTQC(ch_reads)
+
+    SMALLRNASEQ(ch_reads)
 }

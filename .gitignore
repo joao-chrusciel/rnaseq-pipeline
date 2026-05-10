@@ -15,6 +15,8 @@ params/*.yaml
 *.fasta
 *.fa.gz
 *.fasta.gz
+!assets/*.fa
+!assets/*.fasta
 *.gtf
 *.gtf.gz
 *_index/
