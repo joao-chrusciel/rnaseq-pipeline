@@ -3,6 +3,7 @@ include { FASTQC as FASTQC_TRIMMED } from '../modules/fastqc'
 include { CUTADAPT } from '../modules/cutadapt'
 include { BBDUK_SPIKEIN } from '../modules/bbduk_spikein'
 include { MIRGE3 } from '../modules/mirge3'
+include { KRAKEN2 } from '../modules/kraken2'
 include { MULTIQC } from '../modules/multiqc'
 
 workflow SMALLRNASEQ {
@@ -35,6 +36,15 @@ workflow SMALLRNASEQ {
         ch_clean_reads = BBDUK_SPIKEIN.out.reads
         ch_qc = ch_qc.mix(BBDUK_SPIKEIN.out.log)
     }
+
+    // Kraken2
+    if (params.run_kraken2) {
+    if (!params.kraken2_db) {
+        error "Missing --kraken2_db. Provide path to Kraken2 database directory."
+    }
+    KRAKEN2(ch_clean_reads, file(params.kraken2_db))
+    ch_qc = ch_qc.mix(KRAKEN2.out.report.map { _meta, report -> report })
+}
 
     // Quantification
     if (!params.mirge_lib) {

@@ -19,6 +19,7 @@ From: debian:12
         samtools="{{ SAMTOOLS_VERSION }}" \
         bbmap="{{ BBMAP_VERSION }}" \
         vienna-rna="{{ VIENNARNA_VERSION }}" \
+        kraken2="{{ KRAKEN2_VERSION }}" \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
     #timezone and language settings for Brazil
@@ -54,6 +55,7 @@ From: debian:12
     cutadapt --version
     bbduk.sh --version 2>&1 | head -2
     miRge3.0 --version
+    kraken2 --version
     multiqc --version
     bowtie --version | head -1
     samtools --version | head -1
@@ -75,6 +77,7 @@ From: debian:12
         multiqc=={{ MULTIQC_VERSION }}
         bowtie=={{ BOWTIE_VERSION }}
         samtools=={{ SAMTOOLS_VERSION }}
+        kraken2=={{ KRAKEN2_VERSION }}
 
     numpy<1.27 pinned for miRge3/scipy ABI compatibility.
 
