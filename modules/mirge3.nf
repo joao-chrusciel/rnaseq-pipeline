@@ -12,6 +12,7 @@ process MIRGE3 {
 
     script:
     def novel_flag = params.predict_novel_mirna ? '--novel-miRNA' : ''
+    def trf_flag = params.run_trf ? '-trf' : ''
     """
     miRge3.0 \\
         -s ${reads.join(',')} \\
@@ -21,6 +22,7 @@ process MIRGE3 {
         -a ${params.adapter} \\
         -o mirge3_output \\
         --threads ${task.cpus} \\
-        ${novel_flag}
+        ${novel_flag} \\
+        ${trf_flag}
     """
 }
