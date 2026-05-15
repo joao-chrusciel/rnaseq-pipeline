@@ -1,0 +1,15 @@
+title: "RA8 — small RNA-seq QC"
+subtitle: "Brain tissue-EV small RNA cargo"
+intro_text: "Quality control for the RA8 small RNA-seq pipeline: adapter trimming, length filtering, miND spike-in removal, and Kraken2 taxonomic screening. Bowtie YRNA/piRNA alignment statistics are reported separately in the analysis."
+
+module_order:
+  - fastqc
+  - cutadapt
+  - bbmap
+  - kraken
+
+extra_fn_clean_exts:
+  - ".cutadapt"
+  - ".bbduk"
+  - ".spikein_stats"
+  - ".kraken2"

@@ -20,6 +20,8 @@ From: debian:12
         bbmap="{{ BBMAP_VERSION }}" \
         vienna-rna="{{ VIENNARNA_VERSION }}" \
         kraken2="{{ KRAKEN2_VERSION }}" \
+        cd-hit="{{ CDHIT_VERSION }}" \
+        ncbi-blast+ \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
     #timezone and language settings for Brazil
@@ -60,6 +62,8 @@ From: debian:12
     bowtie --version | head -1
     samtools --version | head -1
     python3 --version
+    cd-hit-est -h 2>&1 | head -3
+    blastn -version
 
 %labels
     author Joao Henrique Chrusciel

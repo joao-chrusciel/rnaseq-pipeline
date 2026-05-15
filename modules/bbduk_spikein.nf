@@ -8,7 +8,7 @@ process BBDUK_SPIKEIN {
     path spikein_fasta
 
     output:
-    tuple val(meta), path('*.no_spikein.fastq.gz'), emit: reads
+    tuple val(meta), path("${meta.id}.clean.fastq.gz"), emit: reads
     path '*.spikein_stats.txt', emit: stats
     path '*.bbduk.log', emit: log
 
@@ -16,8 +16,7 @@ process BBDUK_SPIKEIN {
     """
     bbduk.sh \\
         in=${reads} \\
-        out=${meta.id}.no_spikein.fastq.gz \\
-        outm=${meta.id}.spikein_matched.fastq.gz \\
+        out=${meta.id}.clean.fastq.gz \\
         ref=${spikein_fasta} \\
         stats=${meta.id}.spikein_stats.txt \\
         statscolumns=5 \\

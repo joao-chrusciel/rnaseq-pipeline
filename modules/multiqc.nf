@@ -4,6 +4,7 @@ process MULTIQC {
 
     input:
     path qc_files
+    path multiqc_config
 
     output:
     path 'multiqc_report.html', emit: report
@@ -11,6 +12,6 @@ process MULTIQC {
 
     script:
     """
-    multiqc . --filename multiqc_report.html
+    multiqc . -c ${multiqc_config} --filename multiqc_report.html
     """
 }

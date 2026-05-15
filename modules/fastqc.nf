@@ -11,7 +11,9 @@ process FASTQC {
     tuple val(meta), path("*.zip"), emit: zip
 
     script:
+    def fq = "${meta.id}.${meta.stage}.fastq.gz"
     """
-    fastqc --threads ${task.cpus} ${reads}
+    [ -e "${fq}" ] || ln -s ${reads} ${fq}
+    fastqc --threads ${task.cpus} ${fq}
     """
 }
